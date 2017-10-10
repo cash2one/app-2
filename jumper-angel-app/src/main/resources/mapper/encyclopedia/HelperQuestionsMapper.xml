@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.encyclopedia.mapper.HelperQuestionsMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.encyclopedia.entity.HelperQuestions" >
+  	<result column="id" property="id" jdbcType="INTEGER"/>
+  	<result column="question_type_id" property="questionTypeId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="answer" property="answer" jdbcType="LONGVARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="details_url" property="detailsUrl" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="question_intorduction" property="questionIntorduction" jdbcType="LONGVARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, question_type_id, title, answer, status, add_time, details_url, img_url, question_intorduction
+  </sql>
+  
+  <!-- 获取孕期百科常见问题列表 -->
+  <select id="findQuestionList" resultMap="BaseResultMap" parameterType="map">
+  	select
+  		<include refid="Base_Column_List"></include> 
+  	 from helper_questions where question_type_id=#{type_id} and status=0 order by add_time desc limit #{start},#{page_size}
+  </select>
+  
+</mapper>

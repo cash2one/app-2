@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+  	<dubbo:application name="doctor-consumer"/>
+	<dubbo:registry protocol="zookeeper" address="${server.zookeeper}"/>
+	<!-- 用户信息 -->
+	<dubbo:reference id="userService" interface="com.jumper.dubbo.service.UserService" timeout="180000" retries="0"/>
+    <!-- 医生信息 -->
+    <dubbo:reference id="doctorService" interface="com.jumper.dubbo.service.DoctorService" timeout="180000" retries="0"/>
+    <dubbo:reference id="commonDictionaryService" interface="com.jumper.dubbo.service.CommonDictionaryService" timeout="180000" retries="0"/>
+    <!-- 身份验证 -->
+    <dubbo:reference id="authKeyService" interface="com.jumper.dubbo.service.AuthKeyService" timeout="180000" retries="0"/>
+    <!-- 医院信息 -->
+    <dubbo:reference id="hospitalService" interface="com.jumper.dubbo.service.HospitalService" timeout="180000" retries="0"/>
+    <!-- 体重营养 -->
+    <dubbo:reference id="healthBaseService" interface="cn.com.jumper.anglesound.service.HealthBaseService" version="1.0.0" timeout="180000" check="false"/>
+
+	<!-- 基础模块相关dubbo服务 Start -->
+    <!-- 消息相关服务 -->
+    <!-- <dubbo:reference id="imMsgServiceImpl" interface="com.jumper.common.service.im.ImMsgService" check="false"/> -->
+    <dubbo:reference id="imMsgService" interface="com.jumper.common.service.im.ImMsgService" timeout="1200000" version="1.0.0" check="false"/>
+ 	<!-- JPUSH服务 -->
+    <dubbo:reference id="jpushService" interface="com.jumper.common.service.jpush.JpushService" timeout="180000" retries="0" version="1.0.0" />
+	<!-- 手机短信 -->
+    <dubbo:reference id="smsService" interface="com.jumper.common.service.sms.SMSService" timeout="180000" retries="0" version="1.0.0" />
+    <!-- 推送相关服务 -->
+    <dubbo:reference id="chatUserService" interface="com.jumper.common.service.user.ChatUserService" timeout="1200000" version="1.0.0" />
+    <!-- 基础模块相关dubbo服务 End -->
+    
+    <!-- 网络诊室订单相关服务 (暂时不要)-->
+    <!-- <dubbo:reference id="networkOrderInfoService" interface="cn.com.jumper.anglesound.service.orderinfo.NetworkOrderInfoService" check="false"/> -->
+    
+    <!-- 支付系统 -->
+    <dubbo:reference id="dubboPaymentService " interface="cn.com.jumper.anglesound.dubbo.DubboPaymentService" version="1.0.0" check="false"/>
+
+	<!-- 新的im服务 -->
+	<dubbo:reference id="imAccountsService" interface="com.jumper.common.service.im.ImAccountsService" timeout="180000" retries="0" version="1.0.0" check="false" />
+    
+    
+</beans>

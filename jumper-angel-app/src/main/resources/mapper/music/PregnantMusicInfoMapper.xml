@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.music.mapper.PregnantMusicInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.music.entity.PregnantMusicInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="week" property="week" jdbcType="INTEGER" />
+    <result column="day" property="day" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="voice_url" property="voiceUrl" jdbcType="VARCHAR" />
+    <result column="length" property="length" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="irc" property="irc" jdbcType="VARCHAR" />
+    <result column="category" property="category" jdbcType="INTEGER" />
+    <result column="listen_times" property="listenTimes" jdbcType="INTEGER" />
+    <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, week, day, name, voice_url, length, add_time, irc, category, listen_times, cover_url, 
+    status, sort, is_deleted
+  </sql>
+  
+  <!-- 查询电台信息 -->
+  <select id="findPregnantMusicByCategory" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from pregnant_music_info 
+  	where category=#{category} and status=1 and is_deleted=0 order by sort desc limit #{beginIndex}, #{everyPage}
+  </select>
+  
+  <!-- 查询电台总记录数 -->
+  <select id="findCount" resultType="Integer" parameterType="Integer">
+  	select
+  		count(1)
+  	from pregnant_music_info 
+  	where category=#{value} and status=1 and is_deleted=0
+  </select>
+  
+</mapper>

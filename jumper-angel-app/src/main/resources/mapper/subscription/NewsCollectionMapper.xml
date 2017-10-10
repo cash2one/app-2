@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.NewsCollectionMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.NewsCollection" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="news_information_id" property="newsInformationId" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, news_information_id, add_time
+  </sql>
+  
+  <!-- 查询用户收藏过的文章 -->
+  <select id="findNewsCollection" resultMap="BaseResultMap" parameterType="com.jumper.angel.app.subscription.entity.NewsCollection">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_collection where user_id=#{userId} and news_information_id=#{newsInformationId}
+  </select>
+  
+  <!-- 添加收藏 -->
+  <insert id="saveNewsCollection" parameterType="com.jumper.angel.app.subscription.entity.NewsCollection">
+  	insert into news_collection(user_id, news_information_id, add_time) values (#{userId}, #{newsInformationId}, #{addTime})
+  </insert>
+  
+  <!-- 删除收藏 -->
+  <delete id="deleteNewsCollection" parameterType="com.jumper.angel.app.subscription.entity.NewsCollection">
+  	delete from news_collection where user_id=#{userId} and news_information_id=#{newsInformationId}
+  </delete>
+  
+  <!-- 查询收藏的文章列表 -->
+  <select id="findNewsCollectionsByUserId" parameterType="int" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_collection where user_id=#{user_id} order by add_time desc
+  </select>
+  
+</mapper>

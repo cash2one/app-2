@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+						http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+						http://www.springframework.org/schema/context
+						http://www.springframework.org/schema/context/spring-context-4.3.xsd
+						http://www.springframework.org/schema/aop
+						http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+						http://www.springframework.org/schema/tx
+						http://www.springframework.org/schema/tx/spring-tx-4.3.xsd
+	 					http://www.springframework.org/schema/mvc 
+                        http://www.springframework.org/schema/mvc/spring-mvc-4.3.xsd">
+	
+	<!-- 使用annotation 自动注册bean,并保证@Required,@Autowired的属性被注入 -->
+	<context:annotation-config />
+	
+	<!-- 配置属性文件 -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+			<list>
+				<!-- <value>classpath:conf/jdbc.properties</value>
+				<value>classpath:conf/spring-config.properties</value> -->
+				<!-- 推荐使用file的方式引入，这样可以将配置和代码分离 -->  
+              	<value>file:${WEBAPP_APP_HOME_CONF}/conf/jdbc.properties</value>
+              	<value>file:${WEBAPP_APP_HOME_CONF}/conf/spring-config.properties</value>
+			</list>
+		</property>
+	</bean>
+    
+	<!-- 导入Spring配置文件 -->
+	<import resource="classpath:conf/spring-datasource-jdbc.xml" />
+	<import resource="classpath:conf/spring-datasource-solr.xml" />
+	 <!-- 导入dubbo配置文件 -->
+	<import resource="classpath:conf/spring-dubbo-consumer.xml"/>
+	<!-- 导入定时器配置文件 -->
+	<import resource="classpath:conf/spring-quartz.xml"/>
+
+	<!-- 配置MyBatis，将spring和mybatis整合 -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource"></property>
+		<property name="configLocation" value="classpath:conf/mybatis-config.xml"></property>
+		<!-- 加载mapper文件 -->
+		<property name="mapperLocations" value="classpath:mapper/**/*.xml"></property>
+	</bean>
+	
+	<!-- mybatis自动映射 -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.jumper.angel.app.*.mapper"></property>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+	</bean>
+	
+    <!-- 配置事务 -->  
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">  
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    
+	<!-- 事物管理 通知 -->
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" read-only="true" />
+			<tx:method name="find*" read-only="true" />
+			<tx:method name="query*" read-only="true" />
+			<tx:method name="is*" read-only="true" />
+			<tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.Throwable" />
+		</tx:attributes>
+	</tx:advice>
+	
+	<!-- 事物代理 -->
+	<aop:config proxy-target-class="true">
+	 	<aop:pointcut id="serviceMethods" expression="execution(* com.jumper.angel.app.*.service..*(..))"/>  
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethods"/>
+	</aop:config>
+	
+	<!-- 开启AOP监听 只对当前配置文件有效，启用对事务注解的支持 -->
+	<aop:aspectj-autoproxy expose-proxy="true" />
+ 	
+</beans>

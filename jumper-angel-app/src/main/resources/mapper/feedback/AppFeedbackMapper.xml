@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.feedback.mapper.AppFeedbackMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.feedback.entity.AppFeedback" >
+  	<result column="id" property="id" jdbcType="INTEGER"/>
+  	<result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="contact_way" property="contactWay" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, content, add_time, status, contact_way
+  </sql>
+  
+  <!-- 添加用户意见反馈 -->
+  <insert id="addUserFeedback" parameterType="com.jumper.angel.app.feedback.entity.AppFeedback" useGeneratedKeys="true" flushCache="true" keyColumn="GENERATED_KEY" keyProperty="id">
+  	insert into app_feedback(content,add_time,status,contact_way) values(#{content},#{addTime},#{status},#{contactWay})
+  </insert>
+  
+</mapper>

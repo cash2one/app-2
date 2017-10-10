@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.UserSubscribeChannelMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.UserSubscribeChannel" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, channel_id, add_time
+  </sql>
+  
+  <!-- 查询用户已订阅的频道 -->
+  <select id="findUserSubscribeChannel" resultType="java.util.HashMap" parameterType="Long">
+  	select
+  		nc.id,
+		nc.chanel_name as chanelName
+  	from user_subscribe_channel_new uc,news_chanels nc where uc.channel_id=nc.id
+  	and user_id=#{value}
+  </select>
+  
+  <!-- 查询用户订阅的频道 -->
+  <select id="findUserSubscribeChannelByUserId" resultMap="BaseResultMap" parameterType="Long">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from user_subscribe_channel_new where user_id=#{value}
+  </select>
+  
+  <!-- 添加用户订阅频道 -->
+  <insert id="saveUserSubscribeChannel" parameterType="com.jumper.angel.app.subscription.entity.UserSubscribeChannel">
+  	insert into user_subscribe_channel_new (user_id, channel_id, add_time) values (#{userId}, #{channelId}, #{addTime})
+  </insert>
+  
+  <!-- 删除用户频道 -->
+  <delete id="deleteUserSubscribeChannel" parameterType="java.util.HashMap">
+  	delete from user_subscribe_channel_new where user_id=#{userId} and channel_id=#{channelId}
+  </delete>
+  
+</mapper>

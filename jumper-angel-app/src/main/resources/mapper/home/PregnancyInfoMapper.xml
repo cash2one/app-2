@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.home.mapper.PregnancyInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.home.entity.PregnancyInfo" >
+    <result column="week" property="week" jdbcType="INTEGER" />
+    <result column="fetal_height" property="fetalHeight" jdbcType="DOUBLE" />
+    <result column="both_arm" property="bothArm" jdbcType="DOUBLE" />
+    <result column="fetal_weight" property="fetalWeight" jdbcType="DOUBLE" />
+    <result column="both_neck" property="bothNeck" jdbcType="VARCHAR" />
+    <result column="week_description" property="weekDescription" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    week, fetal_height, both_arm, fetal_weight, both_neck, week_description, image_url
+  </sql>
+  
+  <!-- 通过用户ID和孕周查询孕期信息 -->
+  <select id="findPrepnancyInfoByUserIdAndWeek" resultMap="BaseResultMap" parameterType="Integer">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from pregnancy_info where week=#{value}
+  </select>
+  
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.home.mapper.InteractionMoodDiaryMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.home.entity.InteractionMoodDiary" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="is_delete" property="isDelete" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="mood_expression" property="moodExpression" jdbcType="INTEGER" />
+    <result column="pregnant_week_id" property="pregnantWeekId" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, content, img_url, add_time, is_delete, user_id, mood_expression, pregnant_week_id
+  </sql>
+  
+  <!-- 新增宝妈日记 -->
+  <insert id="save" parameterType="com.jumper.angel.app.home.entity.InteractionMoodDiary" >
+    insert into interaction_mood_diary (content, img_url, 
+      add_time, is_delete, user_id, 
+      mood_expression, pregnant_week_id)
+    values (#{content,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{addTime,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, 
+      #{moodExpression,jdbcType=INTEGER}, #{pregnantWeekId,jdbcType=INTEGER})
+  </insert>
+  
+</mapper>

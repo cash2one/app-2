@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.encyclopedia.mapper.HelperQuestionClassMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.encyclopedia.entity.HelperQuestionClass" >
+  	<result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="is_visible" property="isVisible" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name, is_visible, add_time
+  </sql>
+  
+  <!-- 获取孕期百科常见问题类型 -->
+  <select id="getAllQuestionClass" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"></include> 
+  	 from helper_question_class where is_visible=0 order by add_time desc
+  </select>
+  
+</mapper>

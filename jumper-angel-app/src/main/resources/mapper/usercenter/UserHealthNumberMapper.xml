@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.usercenter.mapper.UserHealthNumberMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.usercenter.entity.UserHealthNumber" >
+  	<result column="id" property="id" jdbcType="BIGINT"/>
+  	<result column="user_id" property="userId" jdbcType="INTEGER" />
+  	<result column="hospital_id" property="hospitalId" jdbcType="INTEGER" />
+  	<result column="health_num" property="healthNum" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, hospital_id, health_num, add_time
+  </sql>
+  <!-- 查找用户保健号  -->
+  <select id="findUserHealthNumber" parameterType="map" resultMap="BaseResultMap">
+  	select 
+  		<include refid="Base_Column_List"></include>
+  			from user_health_number where user_id=#{user_id} and hospital_id=#{hospital_id}
+  </select>
+
+  <!-- 添加用户关联医院保健号 -->
+  <insert id="addUserHealthNumber" parameterType="com.jumper.angel.app.usercenter.entity.UserHealthNumber">
+  	insert into user_health_number(id, user_id, hospital_id, health_num, add_time) values(#{id}, #{userId}, #{hospitalId}, #{healthNum}, #{addTime})
+  </insert>
+  
+  <!-- 修改用户关联医院保健号 -->
+  <update id="updateUserHealthNumber" parameterType="com.jumper.angel.app.usercenter.entity.UserHealthNumber">
+  	update user_health_number set health_num=#{healthNum} where id=#{id}
+  </update>
+  
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.ImUserCollectionMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.ImUserCollection" >
+    <result column="COLLEC_ID" property="collecId" jdbcType="BIGINT" />
+    <result column="USER_ID" property="userId" jdbcType="VARCHAR" />
+    <result column="DEBATEPOST_ID" property="debatePostId" jdbcType="BIGINT" />
+    <result column="CREDTE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    COLLEC_ID, USER_ID, DEBATEPOST_ID, CREDTE_DATE
+  </sql>
+  
+  <!-- 查询收藏的话题列表 -->
+  <select id="findTopicCollectionsByUserId" resultType="com.jumper.angel.app.subscription.vo.DebatePostVo" parameterType="map">
+  	SELECT
+		T_IM_DEBATEPOST.DEBATEPOST_ID ,T_IM_DEBATEPOST.DEBATEPOST_TITLE, T_IM_DEBATEPOST.DEBATEPOST_CONTENT, T_IM_DEBATEPOST.IMG, T_IM_USER_COLLECTION.CREDTE_DATE, T_IM_TOPIC.TOPIC_ID, T_IM_TOPIC.TOPIC_NAME
+	FROM
+		T_IM_USER_COLLECTION,
+		T_IM_DEBATEPOST,
+		T_IM_TOPIC
+	WHERE
+		T_IM_USER_COLLECTION.DEBATEPOST_ID = T_IM_DEBATEPOST.DEBATEPOST_ID
+	AND T_IM_TOPIC.TOPIC_ID = T_IM_DEBATEPOST.TOPIC_ID
+	AND T_IM_USER_COLLECTION.USER_ID = #{userId}
+	ORDER BY
+		T_IM_DEBATEPOST.CREATE_TIME DESC;
+  </select>
+  
+</mapper>

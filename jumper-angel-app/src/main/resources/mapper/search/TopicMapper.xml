@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.search.mapper.TopicMapper" >
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.search.model.po.Topic" >
+    <id column="TOPIC_ID" property="topicId" jdbcType="BIGINT" />
+    <result column="TOPIC_NAME" property="topicName" jdbcType="VARCHAR" />
+    <result column="TOPIC_PROFILE" property="topicProfile" jdbcType="VARCHAR" />
+    <result column="THEMATIC_IMG" property="thematicImg" jdbcType="VARCHAR" />
+    <result column="TOPIC_MEMBERSHIP" property="topicMembership" jdbcType="INTEGER" />
+    <result column="TOTALPOSTS" property="totalposts" jdbcType="INTEGER" />
+    <result column="DATA_STATE" property="dataState" jdbcType="INTEGER" />
+    <result column="IS_DELETE" property="isDelete" jdbcType="INTEGER" />
+    <result column="CREATE_USER_ID" property="createUserId" jdbcType="VARCHAR" />
+    <result column="CREATE_TIME" property="createTime" jdbcType="BIGINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    TOPIC_ID, TOPIC_NAME, TOPIC_PROFILE, THEMATIC_IMG, TOPIC_MEMBERSHIP, TOTALPOSTS, 
+    DATA_STATE, IS_DELETE, CREATE_USER_ID, CREATE_TIME
+  </sql>
+  
+  <!-- 条件查询获取话题数量 -->
+  <select id="findTopicCount" parameterType="map" resultType="int">
+  	select count(*) from T_IM_TOPIC where IS_DELETE &lt;&gt; 2 
+  		<if test="topicName!=null and topicName!=''">  
+        	and TOPIC_NAME like 
+        	CONCAT('%',#{topicName,jdbcType=VARCHAR},'%') escape '/' 
+     	</if>
+  </select>
+  
+  <!-- 模糊查询话题列表 -->
+   <select id="searchTopicList" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from T_IM_TOPIC
+    	where IS_DELETE &lt;&gt; 2 
+    	 <if test="topicName!=null and topicName!=''">  
+        	and TOPIC_NAME like 
+        	CONCAT('%',#{topicName,jdbcType=VARCHAR},'%') escape '/'
+     	</if>
+     	 order by CREATE_TIME desc limit #{start}, #{page_size}
+  </select>
+
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.bindhospital.mapper.BindHospitalLogMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.bindhospital.entity.BindHospitalLog" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="hospital_id" property="hospitalId" jdbcType="BIGINT" />
+    <result column="opration_status" property="oprationStatus" jdbcType="INTEGER" />
+    <result column="mobile_ip" property="mobileIp" jdbcType="VARCHAR" />
+    <result column="lng" property="lng" jdbcType="DECIMAL" />
+    <result column="lat" property="lat" jdbcType="DECIMAL" />
+    <result column="mobile_mac" property="mobileMac" jdbcType="VARCHAR" />
+    <result column="version_name" property="versionName" jdbcType="VARCHAR" />
+    <result column="mobile_type" property="mobileType" jdbcType="INTEGER" />
+    <result column="cause" property="cause" jdbcType="VARCHAR" />
+    <result column="first_binding" property="firstBinding" jdbcType="INTEGER" />
+    <result column="binding_date" property="bindingDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, hospital_id, opration_status, mobile_ip, lng, lat, mobile_mac, version_name, 
+    mobile_type, cause, first_binding, binding_date
+  </sql>
+  
+  <!-- 新增绑定医院流水记录 -->
+  <insert id="addBindHospitalLog" parameterType="com.jumper.angel.app.bindhospital.entity.BindHospitalLog" >
+    insert into bind_hospital_log (id, user_id, hospital_id, 
+      opration_status, mobile_ip, lng, 
+      lat, mobile_mac, version_name, 
+      mobile_type, cause, first_binding, 
+      binding_date)
+    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{hospitalId,jdbcType=BIGINT}, 
+      #{oprationStatus,jdbcType=INTEGER}, #{mobileIp,jdbcType=VARCHAR}, #{lng,jdbcType=DOUBLE}, 
+      #{lat,jdbcType=DOUBLE}, #{mobileMac,jdbcType=VARCHAR}, #{versionName,jdbcType=VARCHAR}, 
+      #{mobileType,jdbcType=INTEGER}, #{cause,jdbcType=VARCHAR}, #{firstBinding,jdbcType=INTEGER}, 
+      #{bindingDate,jdbcType=TIMESTAMP})
+  </insert>
+  
+  
+  
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.NewsChanelsMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.NewsChanels" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="chanel_name" property="chanelName" jdbcType="VARCHAR" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="order_by" property="orderBy" jdbcType="INTEGER" />
+    <result column="channel_desc" property="channelDesc" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="channel_ver" property="channelVer" jdbcType="INTEGER" />
+    <result column="sub_num" property="subNum" jdbcType="INTEGER" />
+    <result column="is_default_sub" property="isDefaultSub" jdbcType="BIT" />
+    <result column="is_video" property="isVideo" jdbcType="BIT" />
+    <result column="hospital_id" property="hospitalId" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="TINYINT" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, chanel_name, add_time, order_by, channel_desc, img_url, channel_ver, sub_num, 
+    is_default_sub, is_video, hospital_id, state
+  </sql>
+  
+  <!-- 查询所有频道 -->
+  <select id="findNewChannels" resultMap="BaseResultMap" parameterType="Integer">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_chanels where state=1 and hospital_id=49 order by order_by asc
+  </select>
+  
+  <!-- 通过id查询频道信息 -->
+  <select id="findNewChannelById" parameterType="int" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+	from news_chanels where id=#{channelId}
+  </select>
+  
+  <!-- 更新频道订阅量 -->
+  <update id="updateNewChannel" parameterType="com.jumper.angel.app.subscription.entity.NewsChanels">
+  	update news_chanels set sub_num=#{subNum} where id=#{id}
+  </update>
+  
+  <!-- 查询默认频道 -->
+  
+</mapper>

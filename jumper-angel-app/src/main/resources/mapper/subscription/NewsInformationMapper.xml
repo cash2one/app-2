@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.NewsInformationMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.NewsInformation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="channel_id" property="channelId" jdbcType="INTEGER" />
+    <result column="special_topic_id" property="specialTopicId" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="news_url" property="newsUrl" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="is_focus_image" property="isFocusImage" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="clicks" property="clicks" jdbcType="INTEGER" />
+    <result column="is_push" property="isPush" jdbcType="INTEGER" />
+    <result column="introduct" property="introduct" jdbcType="VARCHAR" />
+    <result column="from_logo_url" property="fromLogoUrl" jdbcType="VARCHAR" />
+    <result column="source_from" property="sourceFrom" jdbcType="VARCHAR" />
+    <result column="keywords" property="keywords" jdbcType="VARCHAR" />
+    <result column="is_publish" property="isPublish" jdbcType="INTEGER" />
+    <result column="share_num" property="shareNum" jdbcType="INTEGER" />
+    <result column="praise" property="praise" jdbcType="INTEGER" />
+    <result column="period" property="period" jdbcType="VARCHAR" />
+    <result column="hospital_id" property="hospitalId" jdbcType="INTEGER" />
+    <result column="top" property="top" jdbcType="TIMESTAMP" />
+    <result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, channel_id, special_topic_id, title, news_url, image_url, is_focus_image, add_time, 
+    clicks, is_push, introduct, from_logo_url, source_from, keywords, is_publish, share_num, 
+    praise, period, hospital_id, top, publish_time, content
+  </sql>
+  
+  <!-- 通过频道ID查询资讯信息 -->
+  <select id="findNewsInformationByChannelId" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_information where channel_id=#{channelId} and is_publish=1
+  	order by publish_time desc limit #{beginIndex}, #{everyPage}
+  </select>
+  
+  <!-- 通过频道ID查询资讯总记录数 -->
+  <select id="findCount" resultType="Integer" parameterType="java.util.HashMap">
+  	select
+  		count(1)
+  	from news_information where channel_id=#{channelId} and is_publish=1
+  </select>
+  
+  <!-- 通过ID查询资讯信息 -->
+  <select id="findNewsInformationDetail" resultMap="BaseResultMap" parameterType="Long">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_information where id=#{value}
+  </select>
+  
+  <!-- 更新文章信息 -->
+  <update id="updateNewsInformation" parameterType="com.jumper.angel.app.subscription.entity.NewsInformation">
+  	update news_information set praise=#{praise} where id=#{id}
+  </update>
+  
+  <!-- 关键字搜索文章 -->
+  <select id="searchNewsInformation" parameterType="map" resultMap="BaseResultMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_information where is_publish=1 and title like CONCAT('%',#{keywords},'%') escape '/'
+  	order by publish_time desc limit #{beginIndex}, #{everyPage}
+  </select>
+  
+  <!-- 关键字搜索文章数量 -->
+  <select id="findNewsCountByConditions" parameterType="map" resultType="int">
+  	select count(*) from news_information where is_publish=1 and title like CONCAT('%',#{keywords},'%') escape '/'
+  </select>
+  
+  <!-- 更新文章阅读量 -->
+  <update id="updateNewsInformationClick" parameterType="com.jumper.angel.app.subscription.entity.NewsInformation">
+  	update news_information set clicks=#{clicks} where id=#{id}
+  </update>
+  
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.NewsCommentPraiseMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.NewsCommentPraise" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="mobile_sequence" property="mobileSequence" jdbcType="VARCHAR" />
+    <result column="comment_id" property="commentId" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, mobile_sequence, comment_id, add_time
+  </sql>
+  
+  <!-- 添加用户点赞记录 -->
+  <insert id="saveNewsCommentPraise" parameterType="com.jumper.angel.app.subscription.entity.NewsCommentPraise">
+  	insert into news_comment_praise (mobile_sequence, comment_id, add_time) values (#{mobileSequence}, #{commentId}, #{addTime})
+  </insert>
+  
+  <!-- 查询用户是否点赞了该评论 -->
+  <select id="findNewsCommentPraise" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_comment_praise where mobile_sequence=#{mobileSequence} and comment_id=#{commentId}
+  </select>
+  
+</mapper>

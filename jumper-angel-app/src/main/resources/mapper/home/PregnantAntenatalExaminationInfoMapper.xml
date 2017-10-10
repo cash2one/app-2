@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.home.mapper.PregnantAntenatalExaminationInfoMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.home.entity.PregnantAntenatalExaminationInfo" >
+  	<result column="id" property="id" jdbcType="INTEGER"/>
+    <result column="examination_numbers" property="examinationNumbers" jdbcType="INTEGER" />
+    <result column="start_week" property="startWeek" jdbcType="INTEGER" />
+    <result column="end_week" property="endWeek" jdbcType="INTEGER" />
+    <result column="remind" property="remind" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+    <result column="remind_week" property="remindWeek" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, examination_numbers, start_week, end_week, remind, add_time, remind_week
+  </sql>
+  
+  <!-- 通过孕周查询孕期产检信息 -->
+  <select id="findPrenatalRemind" resultMap="BaseResultMap" parameterType="Integer">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	 from pregnant_antenatal_examination_info where remind_week=#{pregnantWeek}
+  </select>
+  
+  <select id="findPrenatalRemindByWeek" resultMap="BaseResultMap" parameterType="Integer">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	 from pregnant_antenatal_examination_info where
+  	 <![CDATA[
+  	 	start_week<=#{pregnantWeek} and end_week>=#{pregnantWeek}
+  	 ]]>
+  	  order by examination_numbers
+  </select>
+  
+  <!-- 根据产检次数查询产检信息 -->
+  <select id="findPreRemindByNumbers" parameterType="int" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"></include>
+  	 from pregnant_antenatal_examination_info where examination_numbers=#{number}
+  </select>
+  
+</mapper>

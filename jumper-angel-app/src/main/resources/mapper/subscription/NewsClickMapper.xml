@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.subscription.mapper.NewsClickMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.subscription.entity.NewsClick" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="news_id" property="newsId" jdbcType="INTEGER" />
+    <result column="clicks" property="clicks" jdbcType="INTEGER" />
+    <result column="add_date" property="addDate" jdbcType="DATE" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, news_id, clicks, add_date
+  </sql>
+  
+  <!-- 查询文章阅读量 ifnull函数表示：如果为null就返回0 -->
+  <select id="findNewsClick" resultType="Integer" parameterType="Long">
+  	select
+  		IFNULL(sum(clicks), 0)
+  	from news_click where news_id=#{value}
+  </select>
+  
+  <!-- 查询文章当天是否被阅读过 -->
+  <select id="findCurrentNewsClick" resultMap="BaseResultMap" parameterType="Long">
+  	select
+  		<include refid="Base_Column_List"></include>
+  	from news_click where news_id=#{value} and DATE_FORMAT(add_date, '%Y-%m-%d')=DATE_FORMAT(NOW(), '%Y-%m-%d')
+  </select>
+  
+  <!-- 更新文章阅读量 -->
+  <update id="updateNewsClick" parameterType="com.jumper.angel.app.subscription.entity.NewsClick">
+  	update news_click set clicks=#{clicks} where id=#{id}
+  </update>
+  
+  <!-- 新增当天的阅读量 -->
+  <insert id="saveNewsClick" parameterType="com.jumper.angel.app.subscription.entity.NewsClick">
+  	insert into news_click(news_id, clicks, add_date) values (#{newsId}, #{clicks}, #{addDate})
+  </insert>
+  
+</mapper>

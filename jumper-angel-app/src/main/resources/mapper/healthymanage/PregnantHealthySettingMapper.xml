@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jumper.angel.app.healthymanage.mapper.PregnantHealthySettingMapper" >
+
+  <resultMap id="BaseResultMap" type="com.jumper.angel.app.healthymanage.entity.PregnantHealthySetting" >
+  	<result column="id" property="id" jdbcType="INTEGER"/>
+  	<result column="user_id" property="userId" jdbcType="INTEGER" />
+  	<result column="project" property="project" jdbcType="INTEGER" />
+    <result column="state" property="state" jdbcType="INTEGER" />
+    <result column="add_time" property="addTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, project, state, add_time
+  </sql>
+  
+  <!-- 获取用户健康管理工具,用户添加了的，状态为启用的 -->
+  <select id="findUserPregnantHealthySetting" resultMap="BaseResultMap" parameterType="int">
+  	select <include refid="Base_Column_List"></include>
+  		from pregnant_healthy_setting where user_id=#{user_id} and state=0 order by project
+  </select>
+  
+  <!-- 查询用户是否已经添加过该健康工具 -->
+  <select id="findPregnantHealthySettingByProject" resultMap="BaseResultMap" parameterType="map">
+  	select <include refid="Base_Column_List"></include>
+  		from pregnant_healthy_setting where user_id=#{user_id} and project=#{project}
+  </select>
+  
+  <!-- 修改健康工具的状态（禁用或启用） -->
+  <update id="updatePregnantHealthySetting" parameterType="map">
+  	update pregnant_healthy_setting set state=#{state} where user_id=#{user_id} and project=#{project}
+  </update>
+  
+  <!-- 添加用户健康工具 -->
+  <insert id="addPregnantHealthySetting" parameterType="map" flushCache="true" keyColumn="GENERATED_KEY" keyProperty="id" useGeneratedKeys="true">
+  	insert into pregnant_healthy_setting(user_id, project, state, add_time) values(#{user_id}, #{project}, #{state}, #{add_time})
+  </insert>
+  
+</mapper>
